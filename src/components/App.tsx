@@ -22,7 +22,7 @@ export default function App() {
     height: "100vh",
     latitude: 30.948978863202708,
     longitude: -95.24198055267337,
-    zoom: 14,
+    zoom: 14.8,
   });
 
   return (
