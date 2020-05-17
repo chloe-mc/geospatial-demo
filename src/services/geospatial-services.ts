@@ -47,3 +47,18 @@ const generateAnimationRoute = (
     geometry: { coordinates: animationRoute, type: "LineString" },
   };
 };
+
+export const generateContours = (
+  golfCourse: turf.Polygon
+): turf.FeatureCollection => {
+  const breaks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const boundingBox = turf.bbox(golfCourse);
+  const pointGrid = turf.pointGrid(boundingBox, 200, {
+    units: "meters",
+  });
+  turf.featureEach(pointGrid, (feature) => {
+    feature.properties = {};
+    feature.properties.elevation = Math.random() * 10;
+  });
+  return turf.isolines(pointGrid, breaks, { zProperty: "elevation" });
+};
