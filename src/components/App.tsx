@@ -4,6 +4,7 @@ import golfCourse from "../data/golf-course.json";
 import holes from "../data/holes.json";
 import coordyWithHat from "../assets/coordy-golf-hat.png";
 import {
+  generateContours,
   generateWalkingPath,
   goGolfing,
 } from "../services/geospatial-services";
@@ -21,6 +22,7 @@ type Viewport = {
 export default function App() {
   const [coordy, setCoordy] = useState<any>(holes.features[0]);
   const [walkingPath, setWalkingPath] = useState<any>();
+  const [contours, setContours] = useState<any>();
   const [viewport, setViewport] = useState<Viewport>({
     width: "100%",
     height: "100vh",
@@ -50,6 +52,15 @@ export default function App() {
             Go Golfing!
           </button>
         )}
+        <button
+          onClick={() =>
+            contours
+              ? setContours(null)
+              : setContours(generateContours(golfCourse as any))
+          }
+        >
+          Toggle Contours!
+        </button>
         <Source id="golf-course" type="geojson" data={golfCourse as any}>
           <Layer
             id="golf-course-style"
@@ -82,6 +93,15 @@ export default function App() {
           <Source id="walking-path" type="geojson" data={walkingPath}>
             <Layer
               id="walking-path-style"
+              type="line"
+              paint={{ "line-color": "gray" }}
+            />
+          </Source>
+        )}
+        {contours && (
+          <Source id="contours" type="geojson" data={contours}>
+            <Layer
+              id="contours-style"
               type="line"
               paint={{ "line-color": "gray" }}
             />
