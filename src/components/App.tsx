@@ -3,6 +3,7 @@ import ReactMapGL, { Source, Layer, Marker } from "react-map-gl";
 import golfCourse from "../data/golf-course.json";
 import holes from "../data/holes.json";
 import coordyWithHat from "../assets/coordy-golf-hat.png";
+import { generateWalkingPath } from "../services/geospatial-services";
 
 const token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -16,6 +17,7 @@ type Viewport = {
 
 export default function App() {
   const [coordy] = useState<any>(holes.features[0]);
+  const [walkingPath, setWalkingPath] = useState<any>();
   const [viewport, setViewport] = useState<Viewport>({
     width: "100%",
     height: "100vh",
@@ -31,6 +33,15 @@ export default function App() {
         {...viewport}
         onViewportChange={(newViewport: Viewport) => setViewport(newViewport)}
       >
+        <button
+          onClick={() => {
+            walkingPath
+              ? setWalkingPath(null)
+              : setWalkingPath(generateWalkingPath(holes as any));
+          }}
+        >
+          Show Walking Path
+        </button>
         <Source id="golf-course" type="geojson" data={golfCourse as any}>
           <Layer
             id="golf-course-style"
@@ -59,6 +70,15 @@ export default function App() {
             />
           </Marker>
         </Source>
+        {walkingPath && (
+          <Source id="walking-path" type="geojson" data={walkingPath}>
+            <Layer
+              id="walking-path-style"
+              type="line"
+              paint={{ "line-color": "gray" }}
+            />
+          </Source>
+        )}
       </ReactMapGL>
     </div>
   );
