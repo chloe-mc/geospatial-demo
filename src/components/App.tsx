@@ -59,17 +59,17 @@ export default function App() {
             paint={{ "circle-color": "black" }}
           />
         </Source>
-        <Source id="coordy" type="geojson" data={coordy}>
-          <Marker
-            latitude={coordy.geometry.coordinates[1]}
-            longitude={coordy.geometry.coordinates[0]}
-          >
-            <img
-              alt="Coordy wearing an overly-real-looking golf hat"
-              src={coordyWithHat}
-            />
-          </Marker>
-        </Source>
+        <Marker
+          latitude={coordy.geometry.coordinates[1]}
+          longitude={coordy.geometry.coordinates[0]}
+          offsetLeft={-17}
+          offsetTop={-20}
+        >
+          <img
+            alt="Coordy wearing an overly-real-looking golf hat"
+            src={coordyWithHat}
+          />
+        </Marker>
         {walkingPath && (
           <Source id="walking-path" type="geojson" data={walkingPath}>
             <Layer
