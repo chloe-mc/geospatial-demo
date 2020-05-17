@@ -7,6 +7,7 @@ import {
   generateContours,
   generateWalkingPath,
   goGolfing,
+  generateHoles,
 } from "../services/geospatial-services";
 
 const token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -23,6 +24,7 @@ export default function App() {
   const [coordy, setCoordy] = useState<any>(holes.features[0]);
   const [walkingPath, setWalkingPath] = useState<any>();
   const [contours, setContours] = useState<any>();
+  const [newHoles, setNewHoles] = useState<any>();
   const [viewport, setViewport] = useState<Viewport>({
     width: "100%",
     height: "100vh",
@@ -60,6 +62,15 @@ export default function App() {
           }
         >
           Toggle Contours!
+        </button>
+        <button
+          onClick={() =>
+            newHoles
+              ? setNewHoles(null)
+              : setNewHoles(generateHoles(golfCourse as any))
+          }
+        >
+          Toggle New Golf Course!
         </button>
         <Source id="golf-course" type="geojson" data={golfCourse as any}>
           <Layer
@@ -104,6 +115,19 @@ export default function App() {
               id="contours-style"
               type="line"
               paint={{ "line-color": "gray" }}
+            />
+          </Source>
+        )}
+        {newHoles && (
+          <Source id="newHoles" type="geojson" data={newHoles}>
+            <Layer
+              id="newHoles-style"
+              type="circle"
+              paint={{
+                "circle-color": "yellow",
+                "circle-opacity": 0.4,
+                "circle-radius": 10,
+              }}
             />
           </Source>
         )}
