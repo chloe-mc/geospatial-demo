@@ -62,3 +62,42 @@ export const generateContours = (
   });
   return turf.isolines(pointGrid, breaks, { zProperty: "elevation" });
 };
+
+const getRandomPointsWithinPolygon = (
+  points: turf.FeatureCollection,
+  pointsNeeded: number,
+  boundingBox: turf.BBox,
+  polygon: turf.Polygon,
+  totalPointsNeeded: number
+): turf.FeatureCollection => {
+  if (points.features.length === totalPointsNeeded) return points;
+
+  const randomHoles = turf.randomPoint(pointsNeeded, { bbox: boundingBox });
+  const holesToKeep = turf.pointsWithinPolygon(randomHoles, polygon);
+  points.features = points.features.concat(holesToKeep.features).slice(0, 19);
+  pointsNeeded = totalPointsNeeded - points.features.length;
+
+  return getRandomPointsWithinPolygon(
+    points,
+    pointsNeeded,
+    boundingBox,
+    polygon,
+    totalPointsNeeded
+  );
+};
+
+export const generateHoles = (golfCourse: turf.Polygon) => {
+  const boundingBox = turf.bbox(golfCourse);
+  const initialHoles = {
+    type: "FeatureCollection",
+    features: [],
+  };
+  const holesNeeded = 18;
+  return getRandomPointsWithinPolygon(
+    initialHoles,
+    holesNeeded,
+    boundingBox,
+    golfCourse,
+    holesNeeded
+  );
+};
