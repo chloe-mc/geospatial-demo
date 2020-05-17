@@ -16,7 +16,6 @@ type Viewport = {
 
 export default function App() {
   const [coordy] = useState<any>(holes.features[0]);
-  console.log(coordy);
   const [viewport, setViewport] = useState<Viewport>({
     width: "100%",
     height: "100vh",
